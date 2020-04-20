@@ -1,0 +1,28 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t jeremy/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  # the last piece makes the test process exit
+  - docker run jeremy/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t jeremy/multi-client ./client
+  - docker build -t jeremy/multi-nginx ./nginx
+  - docker build -t jeremy/multi-server ./server
+  - docker build -t jeremy/multi-worker ./worker
+  # log in to the docker CLI
+  # add environment variables under profile/settings on Travis CI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # need to now push these images to docker hub
+  - docker push jeremy/multi-client
+  - docker push jeremy/multi-nginx
+  - docker push jeremy/multi-server
+  - docker push jeremy/multi-worker
+  
+
+
+
