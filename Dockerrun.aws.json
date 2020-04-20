@@ -1,0 +1,9 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDifinitions": [
+    {
+      "name": "client",
+      "image": "jjobrien279er/multi-client"
+    }
+  ]
+}
